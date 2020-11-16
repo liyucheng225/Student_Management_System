@@ -131,8 +131,9 @@ void insert_stu(void){
         if(j==1){
             continue;
         }
+            write_stulog(stunum,"添加");
             printf("\n录入学生记录成功，按1继续录入，按其他键返回:");
-             stunum++;
+            stunum++;
             stu[stunum].count=0;
             int flag;
             fflush(stdin);
@@ -154,6 +155,7 @@ void del_stu(char *id){
 					stunum--;
                     flag=1;
                     printf("删除成功");
+                    write_stulog(i,"删除");
 					break;
 				}
 			} 
@@ -254,6 +256,7 @@ void update_stu(int index){//修改学生的属性函数实现
                 scanf("%s",id);
                 strcpy(stu[index].stu_ID,id);
                 printf("\n修改成功！");
+                write_stulog(index,"修改");
             }
            else if(strcmp(str,"姓名")==0){
                 printf("\n请输入要修改姓名的内容：");
@@ -261,6 +264,7 @@ void update_stu(int index){//修改学生的属性函数实现
                 scanf("%s",name);
                 strcpy(stu[index].stu_name,name);
                 printf("\n修改成功！");
+                write_stulog(index,"修改");
             }
             else if(strcmp(str,"所选课程")==0){
                 int flag=0;
@@ -269,12 +273,13 @@ void update_stu(int index){//修改学生的属性函数实现
                 printf("\n请输入要删除的课程名：");
                 char *dcou=(char *)malloc(sizeof(char)*10);
                 scanf("%s",dcou);
-                for(int i=0;i<stu[index].count;i++){
+                for(int i=0;i<stu[index].count-1;i++){
                     if(strcmp(dcou,stu[index].choose_course[i])==0){
                         stu[index].choose_course[i]=stu[index].choose_course[i+1];
                         stu[index].count--;
                         flag=1;
                         printf("删除成功");
+                        write_stulog(index,"修改");
                     }
                 }
                 if(flag==0){
@@ -285,3 +290,18 @@ void update_stu(int index){//修改学生的属性函数实现
                 printf("\n没有这个选项或者此项目无法修改，请重新输入：");
             }
 }
+void write_stulog(int index ,char ty[]){
+         time_t t;
+         struct tm *lt;
+         time (&t);
+         lt=gmtime(&t);
+         FILE *fp;
+         fp=fopen("log.log","a+");
+         if(fp==NULL){
+             printf("没有文件");
+             fclose(fp);
+             return;
+         }
+         fprintf(fp,"\n%d/%d/%d/%d:%d:%d%s学号是%s的学生",lt->tm_year+1900,lt->tm_mon+1,lt->tm_mday,lt->tm_hour+8,lt->tm_min,lt->tm_sec,ty,stu[index].stu_ID);
+         fclose(fp);
+}         

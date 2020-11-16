@@ -64,6 +64,9 @@ void update_stu(int index);
 //写入文件函数定义
 void new_stu(void);
 void new_cou(void);
+void write_stulog(int index ,char ty[]);
+void write_coulog(int index ,char ty[]);
+
 //学生信息结构体
 struct student_info{
     char stu_ID[10];
