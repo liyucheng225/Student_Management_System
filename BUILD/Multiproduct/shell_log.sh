@@ -1,5 +1,7 @@
 #!/bin/bash
-cp ../../log.log ~/
+tar -zcvf log.log.tar.gz  ../../log.log  
+mv log.log.tar.gz ~/
+tar -zxvf ~/log.log.tar.gz -C ~/
 file=~/log.log
 upstu=`grep  "修改" ${file} |grep "学生"| wc -l` 
 upcou=`grep "修改" ${file}|grep "课程"|wc -l`
