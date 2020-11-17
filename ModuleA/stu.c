@@ -149,13 +149,13 @@ void del_stu(char *id){
             int flag=0;
             for(int i=0;i<stunum;i++){
             	if(strcmp(id,stu[i].stu_ID)==0){
+                    write_stulog(i,"删除");
             		for(int j=i;j<stunum-1;j++){
             			stu[j]=stu[j+1];
 					}
 					stunum--;
                     flag=1;
                     printf("删除成功");
-                    write_stulog(i,"删除");
 					break;
 				}
 			} 

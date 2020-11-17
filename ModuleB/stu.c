@@ -151,15 +151,16 @@ void insert_stu(void){
     }
 }
 //3.删除学生信息函数定义
+extern void write_stulog(int index,char ty[]);
 void del_stu(char *id){
             int flag=0;
             for(int i=0;i<stunum;i++){
             	if(strcmp(id,stu[i].stu_ID)==0){
+                    write_stulog(i,"删除");
             		for(int j=i;j<stunum-1;j++){
             			stu[j]=stu[j+1];
 					}
 					stunum--;
-                    printf("%d",stunum);
                     flag=1;
                     printf("删除成功");
                     new_stu();
@@ -262,6 +263,7 @@ void update_stu(int index){
                 scanf("%s",id);
                 strcpy(stu[index].stu_ID,id);
                 printf("\n修改成功！");
+                write_stulog(index,"修改");
                 new_stu();
             }
            else if(strcmp(str,"姓名")==0){
@@ -270,6 +272,7 @@ void update_stu(int index){
                 scanf("%s",name);
                 strcpy(stu[index].stu_name,name);
                 printf("\n修改成功！");
+                write_stulog(index,"修改");
                 new_stu();
             }
             else if(strcmp(str,"所选课程")==0){
@@ -285,6 +288,7 @@ void update_stu(int index){
                         stu[index].count--;
                         flag=1;
                         printf("删除成功");
+                        write_stulog(index,"修改");
                         new_stu();
                     }
                 }
@@ -310,7 +314,6 @@ void new_stu(void){
         return;
     }
     for (int i=0;i<stunum;i++){
-        printf("%d",stunum);
         fprintf(fp,"\n%-10s%-9s\t",stu[i].stu_ID,stu[i].stu_name);
         fclose(fp);
         display_stu_cou(i);
@@ -332,3 +335,19 @@ void display_stu_cou(int index){
              }
              fclose(fp);
 }
+void write_stulog(int index ,char ty[]){
+         time_t t;
+         struct tm *lt;
+         time (&t);
+         lt=gmtime(&t);
+         FILE *fp;
+         fp=fopen("log.log","a+");
+         if(fp==NULL){
+             printf("没有文件");
+             fclose(fp);
+             return;
+         }
+         fprintf(fp,"\n%d/%d/%d/%d:%d:%d%s学号是%s的学生",lt->tm_year+1900,lt->tm_mon+1,lt->tm_mday,lt->tm_hour+8,lt->tm_min,lt->tm_sec,ty,stu[index].stu_ID);
+         fclose(fp);
+}         
+

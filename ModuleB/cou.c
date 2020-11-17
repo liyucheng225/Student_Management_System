@@ -146,13 +146,14 @@ void del_cou(char *id){
             int flag=0;
             for(int i=0;i<counum;i++){
             	if(strcmp(id,cou[i].course_ID)==0){
+                    write_coulog(i,"删除");
             		for(int j=i;j<counum-1;j++){
             			cou[j]=cou[j+1];
 					}
 					counum--;
                     flag=1;
                     printf("课程号删除成功");
-                     new_cou();
+                    new_cou();
 					break;
 				}
 			}
@@ -225,6 +226,7 @@ void update_cou(int index){
                 strcpy(cou[index].course_ID,id);
                 printf("\n修改成功！");
                 new_cou();
+                write_coulog(index,"修改");
             }
            else if(strcmp(str,"课程名")==0){
                 printf("\n请输入要修改姓名的内容：");
@@ -233,6 +235,7 @@ void update_cou(int index){
                 strcpy(cou[index].course_name,name);
                 printf("\n修改成功！");
                 new_cou();
+                write_coulog(index,"修改");
             }
             else if(strcmp(str,"性质")==0){
                 printf("\n请输入要修改性质的内容：");
@@ -241,6 +244,7 @@ void update_cou(int index){
                 strcpy(cou[index].course_nature,nature);
                 printf("\n修改成功！");
                 new_cou();
+                write_coulog(index,"修改");
             }
             else if(strcmp(str,"学时")==0){
                 printf("\n请输入要修改学时的内容：");
@@ -249,6 +253,7 @@ void update_cou(int index){
                 strcpy(cou[index].course_time,time1);
                 printf("\n修改成功！");
                 new_cou();
+                write_coulog(index,"修改");
             }
             else if(strcmp(str,"学分")==0){
                 printf("\n请输入要修改的内容：");
@@ -257,6 +262,7 @@ void update_cou(int index){
                 strcpy(cou[index].course_credit,credit);
                 printf("\n修改成功！");
                 new_cou();
+                write_coulog(index,"修改");
             }
             else if(strcmp(str,"人数限制")==0){
                 printf("\n请输入要修改的内容：");
@@ -265,6 +271,7 @@ void update_cou(int index){
                 strcpy(cou[index].course_stu_limit,limit);
                 printf("\n修改成功！");
                 new_cou();
+                write_coulog(index,"修改");
             }
             else{
                 printf("\n没有这个选项或者此项目无法修改，请重新输入：");
@@ -288,3 +295,19 @@ void new_cou(void){
     }
     fclose(fp);
 }
+void write_coulog(int index ,char ty[]){
+         time_t t;
+         struct tm *lt;
+         time (&t);
+         lt=gmtime(&t);
+         FILE *fp;
+         fp=fopen("log.log","a+");
+         if(fp==NULL){
+             printf("没有文件");
+             fclose(fp);
+             return;
+         }
+         fprintf(fp,"\n%d/%d/%d/%d:%d:%d%s课程号是%s的课程",lt->tm_year+1900,lt->tm_mon+1,lt->tm_mday,lt->tm_hour+8,lt->tm_min,lt->tm_sec,ty,cou[index].course_ID);
+         fclose(fp);
+}         
+
